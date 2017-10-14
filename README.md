@@ -3,7 +3,7 @@
 ![](https://i.imgur.com/3PbUzvx.png)
 
 ## TL;DR How do I make it work?
-0. Download the the right app for your OS on the release page.
+0. Download the the right app for your OS on the [releases page](https://github.com/murilopolese/virtual-motion-midi/releases).
 1. Plug your motion sensor on your computer
 2. Open Virtual Motion MIDI
 3. Open your favourite DAW
