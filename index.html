@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Virtual Motion Midi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="bower_components/bootstra.386/v2.3.1/assets/css/bootstrap.css">
+    <style>
+        input[type="number"] {
+            max-width: 100%;
+            margin: 5px 0;
+            padding: 0;
+        }
+        #hand {
+            display: block;
+            position: absolute;
+            right: 25px;
+            top: -50px;
+            padding: 0;
+            margin: 0 0;
+            font-size: 18px;
+            font-weight: normal;
+            line-height: 20px;
+            word-break: break-all;
+            word-wrap: break-word;
+            white-space: pre;
+            white-space: pre-wrap;
+            border: 0;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+            transform: rotate(-90deg);
+        }
+        .fabulous-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .fabulous-sections {
+            width: 50%;
+            height: calc(100vh - 60px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .fabulous-little-hand {
+            position: relative;
+            width: 50%;
+            height: calc(100vh - 60px);
+        }
+        .fabulous-inputs {
+            height: 80%;
+            width: 135px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: space-around;
+        }
+        .fabulous-inputs div {
+            max-width: 100%;
+        }
+        .fabulous-controls {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            height: 20%;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="brand" href="#">Virtual Motion MIDI (DEMO)</a>
+                <div class="nav-collapse collapse">
+                    <!-- <ul class="nav">
+                        <li class="active"><a href="#">Panel</a></li>
+                        <li><a href="#about">Presets</a></li>
+                        <li><a href="#contact">Help</a></li>
+                    </ul> -->
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="page-header">
+        <h1>Map your motion to MIDI <small>Check help for codes</small></h1>
+    </div> -->
+
+    <div class="fabulous-container">
+        <div class="fabulous-sections">
+            <div class="fabulous-inputs"></div>
+            <div class="fabulous-controls">
+                <div class="btn-group">
+                    <button class="btn addStep">+</button>
+                    <button class="btn removeStep">-</button>
+                </div>
+            </div>
+        </div>
+        <div class="fabulous-little-hand">
+<div id="hand">
+    \\\\
+ _  ||||
+ \`-'''|
+  \   /
+   \__\_
+    \   (
+</div>
+        </div>
+    </div>
+
+    <!-- <script src="bower_components/jquery/dist/jquery.js"></script> -->
+    <!-- <script src="bower_components/bootstra.386/v2.3.1/assets/js/bootstrap.js"></script> -->
+    <script>
+    const ipcRenderer = require('electron').ipcRenderer;
+    let steps = [36, 44, 47, 53];
+    let line = document.querySelector('#cursor');
+    let inputs = document.querySelector('.fabulous-inputs');
+    let addStep = document.querySelector('.addStep');
+    let removeStep = document.querySelector('.removeStep');
+    window.onload = () => {
+
+        let renderInputs = () => {
+            let content = '';
+            steps.forEach((step) => {
+                content += `<div><input class="note-value" type="number" min="0" max="127" step="1" value="${step}" onchange="window.updateValues()"></div>`;
+            });
+            inputs.innerHTML = content;
+        }
+        let updateSteps = () => {
+            ipcRenderer.send('update-steps', steps);
+        }
+        window.updateValues = () => {
+            let values = document.querySelectorAll('.note-value');
+            newSteps = [];
+            values.forEach((input) => {
+                newSteps.push(parseInt(input.value));
+            });
+            steps = newSteps;
+            updateSteps();
+        }
+
+        updateSteps();
+        renderInputs();
+
+        addStep.addEventListener('click', (e) => {
+            if (steps.length < 10) {
+                steps.push(0);
+                renderInputs();
+                updateSteps();
+            }
+        });
+        removeStep.addEventListener('click', (e) => {
+            if (steps.length > 1) {
+                steps.pop();
+                renderInputs();
+                updateSteps();
+            }
+        });
+
+        ipcRenderer.on('proximity', (event, arg) => {
+            let pos = (310/255) * arg;
+            // Jump in steps of 20 px
+            pos = parseInt(pos/20)*20;
+            document.querySelector('#hand').style.transform = `translateY(${pos}px) rotate(-90deg)`
+        });
+        ipcRenderer.on('note-index', (event, arg) => {});
+        ipcRenderer.on('note-value', (event, arg) => {});
+    }
+    </script>
+</body>
+</html>

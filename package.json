@@ -1,0 +1,18 @@
+{
+  "name": "virtual-motion-midi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "midi": "^0.9.5",
+    "serialport": "^5.0.0"
+  },
+  "devDependencies": {
+    "electron": "~1.7.8"
+  },
+  "scripts": {
+    "start": "./node_modules/.bin/electron ."
+  },
+  "author": "Murilo Polese <murilopolese@gmail.com>",
+  "license": "WTFPL"
+}

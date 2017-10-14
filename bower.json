@@ -1,0 +1,22 @@
+{
+  "name": "virtual-motion-midi",
+  "description": "",
+  "main": "main.js",
+  "authors": [
+    "Murilo Polese <murilopolese@gmail.com>"
+  ],
+  "license": "WTFPL",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstra.386": "https://github.com/kristopolous/BOOTSTRA.386.git",
+    "jquery": "^3.2.1"
+  }
+}
