@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Virtual Motion Midi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="bower_components/bootstra.386/v2.3.1/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="static/bootstra.386/assets/css/bootstrap.css">
     <style>
         input[type="number"] {
             max-width: 100%;
@@ -68,6 +68,13 @@
             align-items: center;
             height: 20%;
         }
+        #panel {
+            display: flex;
+        }
+        #help {
+            display: none;
+            padding: 0 20px;
+        }
     </style>
 </head>
 <body>
@@ -79,23 +86,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="brand" href="#">Virtual Motion MIDI (DEMO)</a>
+                <a class="brand" href="#">Virtual Motion MIDI</a>
                 <div class="nav-collapse collapse">
-                    <!-- <ul class="nav">
-                        <li class="active"><a href="#">Panel</a></li>
-                        <li><a href="#about">Presets</a></li>
-                        <li><a href="#contact">Help</a></li>
-                    </ul> -->
-                </div><!--/.nav-collapse -->
+                    <ul class="nav">
+                        <li id="panel-button" class="active"><a href="#">Panel</a></li>
+                        <!-- <li><a href="#about">Presets</a></li> -->
+                        <li id="help-button"><a href="#contact">Help</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- <div class="page-header">
-        <h1>Map your motion to MIDI <small>Check help for codes</small></h1>
-    </div> -->
-
-    <div class="fabulous-container">
+    <div id="panel" class="fabulous-container">
         <div class="fabulous-sections">
             <div class="fabulous-inputs"></div>
             <div class="fabulous-controls">
@@ -116,65 +119,296 @@
 </div>
         </div>
     </div>
+    <div id="help" class="fabulous-container">
+        <h1>HELP PLS!</h1>
+        <br>
+        <p>
+            Hello, I see you came for help. Fear not, things will be fine.
+        </p>
+        <p>
+            Here is the list of things you will find in this help section:
+        </p>
+        <ol>
+            <li><a href="#help-installation">Installation</a></li>
+            <li><a href="#help-interface">Interface</a></li>
+            <li><a href="#help-how-works">How does it work?</a></li>
+            <li><a href="#help-note-numbers">Note Numbers</a></li>
+            <li><a href="#help-daw">Interfacing with your DAW</a></li>
+            <li><a href="#help-techniques">Techniques</a></li>
+            <li><a href="#help-contribute">Contribute</a></li>
+        </ol>
+        <p>
+            If things are terrible, broken and/or you are confused, please read
+            <a href="#help-contribute">this</a>.
+        </p>
+        <br>
+        <div>
+            <h2 id="help-installation">Installation</h2>
+            <br>
+            <p>
+                Well, if you are reading this you have probably installed this
+                piece of software with success. In any case, if you are having
+                problems, please follow <a href="https://github.com/murilopolese/virtual-motion-midi/blob/master/README.md" target="_blank">this instructions</a>.
+            </p>
+        </div>
+        <div>
+            <h2 id="help-interface">Interface</h2>
+            <br>
+            <p>
+                This interface is rough, yes. But it works. On the navigation menu
+                you have a clicable title that won't do anything and 2 options that
+                actually do something: Panel and Help.
+            </p>
+            <p>
+                I supose you have already been to the Panel page. This is the Help page.
+                Click back and forth them, you will understand which one is which.
+            </p>
+            <p>
+                On the <strong>Panel</strong> page you will have 2 columns:
+            </p>
+            <p>
+                On the right side there is a state of the art ASCII art that illustrates
+                the position  of a hand (or any other object or part of your body: go crazy)
+                within the Motion Sensor's range.
+            </p>
+            <p>
+                On the left side there are a few number inputs you can add or remove using
+                the underlying <button class="btn">+</button> and <button class="btn">-</button>.
+            </p>
+            <p>
+                You can modify the values by clicking on the number inputs' up and
+                down arrows (select it to see) or by overriding the value with your
+                keyboard. The inputs range from 0 to 127.
+            </p>
+            <p>
+                The closest input to the ASCII hand is likely the MIDI note that will
+                be sent through MIDI.
+            </p>
+        </div>
+        <div>
+            <h2 id="help-how-works">How does it work?</h2>
+            <br>
+            <p>
+                Ok, so the working principle of this software is simple:
+            </p>
+            <p>
+                Behind the scenes, this app registers itself as 2 MIDI devices. You
+                don't need to do anything, it should just happen. One of those MIDI
+                devices is called "Virtual Input" and the other is "Virtual Output".
+                This "Input" and "Output" are from the MIDI device perspective.
+            </p>
+            <p>
+                The "Virtual Input" will receive MIDI notes from somewhere. the
+                "Virtual Output" will send MIDI notes out to whatever is listening
+                to it on "channel 1".
+            </p>
+            <p>
+                Between the "Virtual Input" and the "Virtual Output" there is a piece
+                of code that modifies the note messages received and route it back.
+                The heart of the Virtual Motion MIDI is how this notes are modified.
+            </p>
+            <p>
+                It takes the value that is on the closest number input to the
+                ASCII hand, replaces the note number received by "Virtual Input" and
+                send back to the "Virtual Output".
+            </p>
+            <p>
+                If you have one input, it will send only one note always. As you
+                add inputs, the range will be (as much as possible) equally split
+                in "zones". Each "zone" represents a number input and there you go.
+            </p>
+            <p>
+                Notice that if the "Virtual Input" doesn't receive any note, it
+                won't output anything. You must send MIDI note in if you want
+                MIDI notes out. Check <a href="#help-daw">Interfacing with your DAW</a>.
+            </p>
+        </div>
+        <div>
+            <h2 id="help-daw">Interfacing with your DAW</h2>
+            <br>
+            <p>
+                You will need 2 tracks: One will send MIDI notes to "Virtual Input"
+                and the other will receive MIDI notes from "Virtual Output".
+            </p>
+            <p>
+                Do it the way you prefer but if you don't send midi to the
+                "Virtual Input", you will get nothing from "Virtual Output".
+            </p>
+        </div>
+        <div>
+            <h2 id="help-note-numbers">Note Numbers</h2>
+            <br>
+            <p>
+                Right! What are MIDI note numbers, you might ask. Search for it on
+                your favorite search engine. Long story short: you have 128 notes
+                starting fom 0 to 127. How do you know which musical note is the
+                number 25? This table:
+            </p>
+            <table>
+                <thead>
+                    <th>NUMBER</th>
+                    <th>NOTE</th>
+                </thead>
+                <tbody>
+                    <tr><td>...</td></tr>
+                    <tr><td>21</td><td>A0</td></tr>
+                    <tr><td>22</td><td>A#0</td></tr>
+                    <tr><td>23</td><td>B0</td></tr>
+                    <tr><td>24</td><td>C1</td></tr>
+                    <tr><td>25</td><td>C#1</td></tr>
+                    <tr><td>26</td><td>D1</td></tr>
+                    <tr><td>27</td><td>D#1</td></tr>
+                    <tr><td>28</td><td>E1</td></tr>
+                    <tr><td>29</td><td>F1</td></tr>
+                    <tr><td>30</td><td>F#1</td></tr>
+                    <tr><td>31</td><td>G1</td></tr>
+                    <tr><td>32</td><td>G#1</td></tr>
+                    <tr><td>33</td><td>A1</td></tr>
+                    <tr><td>...</td></tr>
+                </tbody>
+            </table>
+            <p>
+                Find the full table <a href="https://newt.phys.unsw.edu.au/jw/notes.html" target="_blank">here</a>.
+            </p>
+        </div>
+        <div>
+            <h2 id="help-techniques">Techniques</h2>
+            <br>
+            <p>
+                While you can nerd out your scale out of this table (been there,
+                done that), there are other ways to get nice sounding notes out
+                of this program.
+            </p>
+            <p>
+                Another way to do it is to add sequential numbers from 0 up to the
+                amount of inputs you got. Let's say you got 4 inputs: 0, 1, 2 and 3.
+            </p>
+            <p>
+                Now you will be sending 0, 1, 2 and 3 to your DAW. First pitch
+                shift them to an audible range. You will probably want to shift
+                it at least +36.
+            </p>
+            <p>
+                Then you will probably want to fix the note lengths. This humble
+                software sends really short notes. Really short. In it's current
+                version it doesn't allow you to customise the note lengths so your
+                DAW will have to do it for you.
+            </p>
+            <p>
+                Knowing that the Motion Sensor will behave nicely with up
+                to 5 or 6 splits, unless you are musically gifted the result of
+                playing back and forth 6 adjacent notes will be frustrating for
+                who perform the song and irritating for everyone else in the room.
+            </p>
+            <p>
+                Quantizer (Scale) to the rescue: Add a scale/quantizer to your
+                MIDI instrument and pick the scale that better fits your mood.
+            </p>
+            <p>
+                There is a point where you have nothing else to say than: The
+                possibilities are infinite. From here you can make the notes
+                chords, add arpeggios, delays, reverbs, a vintage sounding drum
+                machine and be a music star.
+            </p>
+        </div>
+        <div>
+            <h2 id="help-contribute">Contribute</h2>
+            <br>
+            <p>
+                This part is really important: This software is free as speach and
+                beer. You get it as it is and I assume no responsabilities on
+                how it will behave or on the expectations you created about it.
+            </p>
+            <p>
+                That been said, I would love you to enjoy it as much as I did
+                spending hours waving my hand on top of a Motion Sensor
+                creating silly basslines while shaking my money maker.
+            </p>
+            <p>
+                If you want to help, check the code on github, report some bugs
+                on the "Issues" section or, that would make my day, rip this
+                thing off and make something yours!
+            </p>
+            <p>
+                Github: <a href="https://www.github.com/murilopolese/virtual-motion-midi" target="_blank">https://www.github.com/murilopolese/virtual-motion-midi</a>
+            </p>
+        </div>
+    </div>
 
-    <!-- <script src="bower_components/jquery/dist/jquery.js"></script> -->
-    <!-- <script src="bower_components/bootstra.386/v2.3.1/assets/js/bootstrap.js"></script> -->
     <script>
-    const ipcRenderer = require('electron').ipcRenderer;
-    let steps = [36, 44, 47, 53];
-    let line = document.querySelector('#cursor');
-    let inputs = document.querySelector('.fabulous-inputs');
-    let addStep = document.querySelector('.addStep');
-    let removeStep = document.querySelector('.removeStep');
-    window.onload = () => {
+        const ipcRenderer = require('electron').ipcRenderer;
+        let steps = [36, 44, 47, 53];
+        let line = document.querySelector('#cursor');
+        let inputs = document.querySelector('.fabulous-inputs');
+        let addStep = document.querySelector('.addStep');
+        let removeStep = document.querySelector('.removeStep');
+        window.onload = () => {
 
-        let renderInputs = () => {
-            let content = '';
-            steps.forEach((step) => {
-                content += `<div><input class="note-value" type="number" min="0" max="127" step="1" value="${step}" onchange="window.updateValues()"></div>`;
-            });
-            inputs.innerHTML = content;
-        }
-        let updateSteps = () => {
-            ipcRenderer.send('update-steps', steps);
-        }
-        window.updateValues = () => {
-            let values = document.querySelectorAll('.note-value');
-            newSteps = [];
-            values.forEach((input) => {
-                newSteps.push(parseInt(input.value));
-            });
-            steps = newSteps;
+            let renderInputs = () => {
+                let content = '';
+                steps.forEach((step) => {
+                    content += `<div><input class="note-value" type="number" min="0" max="127" step="1" value="${step}" onchange="window.updateValues()"></div>`;
+                });
+                inputs.innerHTML = content;
+            }
+            let updateSteps = () => {
+                ipcRenderer.send('update-steps', steps);
+            }
+            window.updateValues = () => {
+                let values = document.querySelectorAll('.note-value');
+                newSteps = [];
+                values.forEach((input) => {
+                    newSteps.push(parseInt(input.value));
+                });
+                steps = newSteps;
+                updateSteps();
+            }
+
             updateSteps();
+            renderInputs();
+
+            addStep.addEventListener('mousedown', (e) => {
+                if (steps.length < 10) {
+                    steps.push(0);
+                    renderInputs();
+                    updateSteps();
+                }
+            });
+            removeStep.addEventListener('mousedown', (e) => {
+                if (steps.length > 1) {
+                    steps.pop();
+                    renderInputs();
+                    updateSteps();
+                }
+            });
+
+            let panel = document.querySelector('#panel'),
+                help = document.querySelector('#help'),
+                panelButton = document.querySelector('#panel-button'),
+                helpButton = document.querySelector('#help-button');
+
+            panelButton.addEventListener('mousedown', (e) => {
+                panel.style.display = 'flex';
+                help.style.display = 'none';
+                panelButton.classList.add('active');
+                helpButton.classList.remove('active');
+            });
+            helpButton.addEventListener('mousedown', (e) => {
+                panel.style.display = 'none';
+                help.style.display = 'block';
+                panelButton.classList.remove('active');
+                helpButton.classList.add('active');
+            });
+
+            ipcRenderer.on('proximity', (event, arg) => {
+                let pos = (310/255) * arg;
+                // Jump in steps of 20 px
+                pos = parseInt(pos/20)*20;
+                document.querySelector('#hand').style.transform = `translateY(${pos}px) rotate(-90deg)`
+            });
+            ipcRenderer.on('note-index', (event, arg) => {});
+            ipcRenderer.on('note-value', (event, arg) => {});
         }
-
-        updateSteps();
-        renderInputs();
-
-        addStep.addEventListener('click', (e) => {
-            if (steps.length < 10) {
-                steps.push(0);
-                renderInputs();
-                updateSteps();
-            }
-        });
-        removeStep.addEventListener('click', (e) => {
-            if (steps.length > 1) {
-                steps.pop();
-                renderInputs();
-                updateSteps();
-            }
-        });
-
-        ipcRenderer.on('proximity', (event, arg) => {
-            let pos = (310/255) * arg;
-            // Jump in steps of 20 px
-            pos = parseInt(pos/20)*20;
-            document.querySelector('#hand').style.transform = `translateY(${pos}px) rotate(-90deg)`
-        });
-        ipcRenderer.on('note-index', (event, arg) => {});
-        ipcRenderer.on('note-value', (event, arg) => {});
-    }
     </script>
 </body>
 </html>
