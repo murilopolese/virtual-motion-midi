@@ -11,7 +11,9 @@
 5. Create a MIDI channel with a clip containing a groove. It doesn't matter which notes your are sending. Send this MIDI notes to the Virtual Input.
 6. Create another MIDI channel with an instrument that will receive the notes from Virtual Output on channel 1.
 7. You have to send MIDI notes to the Virtual Input if you want notes out of the Virtual Output. Therefore, you should press play.
-8. Set linear values if you want to quantise it on your DAW or use [this table](http://newt.phys.unsw.edu.au/jw/notes.html) and crack down MIDI note numbers.
+8. Set sequential values (0, 1, 2, 3...) if you want to quantise it on your DAW or use [this table](http://newt.phys.unsw.edu.au/jw/notes.html) and crack down MIDI note numbers.
+
+Check [this video](https://www.youtube.com/watch?v=kWgb6yUsc48&feature=youtu.be) for a quick tour.
 
 ## What is this for?
 
